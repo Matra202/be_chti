@@ -13,26 +13,29 @@ ARM Macro Assembler    Page 1
     6 00000000         ;Section RAM (read only) :
     7 00000000                 area             mesdata,data,readonly
     8 00000000         ;Te =  PeriodeSonMicroSec en µs 
-    9 00000000 5B 00   Te      dcw              91          ;en µs
-   10 00000002         
-   11 00000002         ;Section RAM (read write):
-   12 00000002                 area             maram,data,readwrite
+    9 00000000         
+   10 00000000         ;Section RAM (read write):
+   11 00000000                 area             maram,data,readwrite
+   12 00000000         
    13 00000000         
-   14 00000000 00 00   SortieSon
-                               dcw              0
-   15 00000002 00 00   indice  dcw              0
-   16 00000004                 EXPORT           SortieSon
-   17 00000004                 EXPORT           indice
-   18 00000004         ; ======================================================
+   14 00000000                 IMPORT           Son
+   15 00000000         
+   16 00000000 00000000 
+                       SortieSon
+                               dcd              0
+   17 00000004 00 00   indice  dcw              0
+   18 00000006                 EXPORT           SortieSon
+   19 00000006                 EXPORT           indice
+   20 00000006         ; ======================================================
                        =========================================
-   19 00000004         
-   20 00000004                 EXPORT           CallbackSon
-   21 00000004         
-   22 00000004         
-   23 00000004         ;Section ROM code (read only) :  
-   24 00000004                 area             moncode,code,readonly
-   25 00000000         ; écrire le code ici  
-   26 00000000                 include          DriverJeuLaser.inc
+   21 00000006         
+   22 00000006                 EXPORT           CallbackSon
+   23 00000006         
+   24 00000006         
+   25 00000006         ;Section ROM code (read only) :  
+   26 00000006                 area             moncode,code,readonly
+   27 00000000         ; écrire le code ici  
+   28 00000000                 include          DriverJeuLaser.inc
     1 00000000         
     2 00000000         ; Bibliotheque DriverJeuLaser (ancienne gassp72 adaptée 
                        2021 - TR)
@@ -60,15 +63,15 @@ ARM Macro Assembler    Page 1
    18 00000000                 import           PWM_Set_Value_TIM3_Ch3
    19 00000000         
    20 00000000         
-   21 00000000         
-   22 00000000         ;/**
-   23 00000000         ; * @brief  Mise à 1 d'une broche GPIO 
 
 
 
 ARM Macro Assembler    Page 2 
 
 
+   21 00000000         
+   22 00000000         ;/**
+   23 00000000         ; * @brief  Mise à 1 d'une broche GPIO 
    24 00000000         ;  * @note   Une fonction par GPIO
    25 00000000         ; * @param  Broche : 0 à 15
    26 00000000         ; * @retval None
@@ -107,33 +110,60 @@ ARM Macro Assembler    Page 2
    59 00000000                 import           LongueurSon
    60 00000000                 import           PeriodeSonMicroSec
    61 00000000                 end
-   27 00000000         
-   28 00000000         CallbackSon
-                               proc
    29 00000000         
-   30 00000000         ;on créer un for de i allant de 1 a 5512 
-   31 00000000         ;cmp indice,#5512
-   32 00000000         ;bne échantillon pas complet
-   33 00000000         ;sinon échantillon complet
-   34 00000000         ;accéder au tableauson à l'indice i
-   35 00000000         ;ajouter 32768 à la valeur 
-   36 00000000         ;diviser cette valeur par 65 535
-   37 00000000         ;multiplier par 719
-   38 00000000         ;on a bien une valeur dans [0;719] sur sortieSon
-   39 00000000         ;il faut store la valeur au bon endroit du tableau[indic
-                       e]
-   40 00000000         ;i++
-   41 00000000         
-   42 00000000                 endp
-   43 00000000         ;cmp i a 5512,bne, algo,i++, 
-   44 00000000                 END
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+   30 00000000         CallbackSon
+                               proc
+   31 00000000         
+   32 00000000 490D            ldr              r1,=indice
+   33 00000002 6808            ldr              r0,[r1]
+   34 00000004 4B0D            ldr              r3,=LongueurSon
+   35 00000006 681C            ldr              r4,[r3]
+   36 00000008 42A0            cmp              r0,r4
+   37 0000000A D014            beq              echantilloncomplet
+   38 0000000C         ;on créer un "for" de i allant de 1 a 5512 (Longueur Son
+                       )
+   39 0000000C         ;cmp indice,#5512
+   40 0000000C         ;bne échantillon pas complet on envoie 
+   41 0000000C         ;sinon échantillon complet on ne lit plus
+   42 0000000C 4B0C            ldr              r3,=Son
+   43 0000000E F933 2010       ldrsh            r2,[r3,r0,lsl#1]
+   44 00000012 F44F 4400       mov              r4,#32768
 
 
 
 ARM Macro Assembler    Page 3 
 
 
+   45 00000016 4422            add              r2,r4
+   46 00000018 F04F 045B       mov              r4,#91
+   47 0000001C FB92 F2F4       sdiv             r2,r4
+   48 00000020         
+   49 00000020         ;accéder au tableauson à l'indice i
+   50 00000020         ;ajouter 32768 à la valeur 
+   51 00000020         ;diviser cette valeur par 65 535
+   52 00000020         ;multiplier par 719
+   53 00000020         ;on a bien une valeur dans [0;719] sur sortieSon
+   54 00000020         ;il faut store la valeur au bon endroit du tableau[indic
+                       e]
+   55 00000020 4C08            ldr              r4,=SortieSon
+   56 00000022 6022            str              r2,[r4]
+   57 00000024 4604            mov              r4,r0
+   58 00000026 B503            push             {r0,r1,lr}
+   59 00000028 F7FF FFFE       bl               PWM_Set_Value_TIM3_Ch3
+   60 0000002C E8BD 4003       pop              {r0,r1,lr}
+   61 00000030 F100 0001       add              r0,#1
+   62 00000034 6008            str              r0,[r1]
+   63 00000036         ;i++
+   64 00000036         echantilloncomplet
+   65 00000036 4770            bx               lr
+   66 00000038                 endp
+   67 00000038         
+   68 00000038                 END
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=.\obj\gestionson.d -o.\obj\gestionson.o -I.\Driver -I.\RTE\_Simu -
 IC:\Programdata\Keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include -IC:\Programd
 ata\Keil\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include --predefine="__EVAL 
@@ -146,14 +176,6 @@ E_ SETA 1" --list=gestionson.lst Src\GestionSon.s
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-Te 00000000
-
-Symbol: Te
-   Definitions
-      At line 9 in file Src\GestionSon.s
-   Uses
-      None
-Comment: Te unused
 mesdata 00000000
 
 Symbol: mesdata
@@ -162,7 +184,7 @@ Symbol: mesdata
    Uses
       None
 Comment: mesdata unused
-2 symbols
+1 symbol
 
 
 
@@ -173,23 +195,25 @@ SortieSon 00000000
 
 Symbol: SortieSon
    Definitions
-      At line 14 in file Src\GestionSon.s
-   Uses
       At line 16 in file Src\GestionSon.s
-Comment: SortieSon used once
-indice 00000002
+   Uses
+      At line 18 in file Src\GestionSon.s
+      At line 55 in file Src\GestionSon.s
+
+indice 00000004
 
 Symbol: indice
    Definitions
-      At line 15 in file Src\GestionSon.s
-   Uses
       At line 17 in file Src\GestionSon.s
-Comment: indice used once
+   Uses
+      At line 19 in file Src\GestionSon.s
+      At line 32 in file Src\GestionSon.s
+
 maram 00000000
 
 Symbol: maram
    Definitions
-      At line 12 in file Src\GestionSon.s
+      At line 11 in file Src\GestionSon.s
    Uses
       None
 Comment: maram unused
@@ -204,19 +228,27 @@ CallbackSon 00000000
 
 Symbol: CallbackSon
    Definitions
-      At line 28 in file Src\GestionSon.s
+      At line 30 in file Src\GestionSon.s
    Uses
-      At line 20 in file Src\GestionSon.s
+      At line 22 in file Src\GestionSon.s
 Comment: CallbackSon used once
+echantilloncomplet 00000036
+
+Symbol: echantilloncomplet
+   Definitions
+      At line 64 in file Src\GestionSon.s
+   Uses
+      At line 37 in file Src\GestionSon.s
+Comment: echantilloncomplet used once
 moncode 00000000
 
 Symbol: moncode
    Definitions
-      At line 24 in file Src\GestionSon.s
+      At line 26 in file Src\GestionSon.s
    Uses
       None
 Comment: moncode unused
-2 symbols
+3 symbols
 
 
 
@@ -277,8 +309,8 @@ Symbol: LongueurSon
    Definitions
       At line 59 in file .\Driver\DriverJeuLaser.inc
    Uses
-      None
-Comment: LongueurSon unused
+      At line 34 in file Src\GestionSon.s
+Comment: LongueurSon used once
 PWM_Set_Value_TIM3_Ch3 00000000
 
 Symbol: PWM_Set_Value_TIM3_Ch3
@@ -291,8 +323,8 @@ External symbols
    Definitions
       At line 18 in file .\Driver\DriverJeuLaser.inc
    Uses
-      None
-Comment: PWM_Set_Value_TIM3_Ch3 unused
+      At line 59 in file Src\GestionSon.s
+Comment: PWM_Set_Value_TIM3_Ch3 used once
 PeriodeSonMicroSec 00000000
 
 Symbol: PeriodeSonMicroSec
@@ -305,9 +337,10 @@ Son 00000000
 
 Symbol: Son
    Definitions
+      At line 14 in file Src\GestionSon.s
       At line 58 in file .\Driver\DriverJeuLaser.inc
    Uses
-      None
-Comment: Son unused
+      At line 42 in file Src\GestionSon.s
+Warning: Son multiply definedComment: Son used once
 10 symbols
-352 symbols in table
+354 symbols in table

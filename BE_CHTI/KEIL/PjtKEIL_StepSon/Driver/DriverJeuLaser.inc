@@ -58,5 +58,4 @@
 	import Son
 	import LongueurSon 
 	import PeriodeSonMicroSec
-	import SortieSon
 	end

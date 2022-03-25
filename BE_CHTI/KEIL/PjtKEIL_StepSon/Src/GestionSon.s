@@ -9,8 +9,11 @@
 
 ;Section RAM (read write):
 	area    maram,data,readwrite
-		
-SortieSon dcw 0
+				
+				
+	IMPORT Son
+	
+SortieSon dcd 0
 indice dcw 0
 	EXPORT SortieSon
 	EXPORT indice
@@ -26,25 +29,40 @@ indice dcw 0
 
 CallbackSon proc
 
-	ldr r0,=indice
-	mov r0,#0xAABB
-	strh r0,[r1]
-	cmp r1,#5512
+	ldr r1,=indice
+	ldr r0,[r1]
+	ldr r3,=LongueurSon
+	ldr r4,[r3]
+	cmp r0,r4
 	beq echantilloncomplet
-;on créer un "for" de i allant de 1 a 5512 
+;on créer un "for" de i allant de 1 a 5512 (Longueur Son)
 				;cmp indice,#5512
 				;bne échantillon pas complet on envoie 
 				;sinon échantillon complet on ne lit plus
-	ldr r2,=Son
+	ldr r3,=Son
+	ldrsh r2,[r3,r0,lsl#1]
+	mov r4,#32768
+	add r2,r4
+	mov r4,#91
+	sdiv r2,r4
+
 ;accéder au tableauson à l'indice i
 ;ajouter 32768 à la valeur 
 ;diviser cette valeur par 65 535
 ;multiplier par 719
 ;on a bien une valeur dans [0;719] sur sortieSon
 ;il faut store la valeur au bon endroit du tableau[indice]
+	ldr r4,=SortieSon
+	str r2,[r4]
+	mov r4,r0
+    push {r0,r1,lr}
+	bl PWM_Set_Value_TIM3_Ch3
+	pop {r0,r1,lr}
+	add r0,#1
+	str r0,[r1]
 ;i++
 echantilloncomplet
 	bx lr 
 	endp	
-		;cmp i a 5512,bne, algo,i++, 
+		 
 	END	
