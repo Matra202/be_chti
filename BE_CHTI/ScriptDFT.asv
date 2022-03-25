@@ -1,0 +1,16 @@
+close all;
+Fsin = 60 ;
+T = 0.;
+M=32;
+Te = T/M;
+Tsim = T-Te;
+Res = sim('SimulDFT');
+plot(Res.Sinus_Continu);
+hold on; % permet de superposer la courbe à suivre
+plot(Res.Sinus_Echanti,'o');
+Y = fft(Res.Sinus_Echanti.Data(),32);
+tab31 = linspace(0,31,32);
+tabHz = linspace(0/T,31/T,32);
+figure();
+hold on;
+plot(tabHz,abs(Y/M),'x');
