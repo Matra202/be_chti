@@ -1,0 +1,9 @@
+f1=85kHz => k1=19
+f2=90kHz => k2=20
+f3=95kHz => k3=21
+f4=100kHz => k4=22
+f5=115kHz => k5=25
+f6=120kHz => k6=26
+
+on considere que nK qui est entier et qu'on doit modulo 64 en faisant un masque 6 bits 2^6=64
+

@@ -114,18 +114,18 @@ ARM Macro Assembler    Page 2
    30 00000000         CallbackSon
                                proc
    31 00000000         
-   32 00000000 490D            ldr              r1,=indice
+   32 00000000 490E            ldr              r1,=indice
    33 00000002 6808            ldr              r0,[r1]
-   34 00000004 4B0D            ldr              r3,=LongueurSon
+   34 00000004 4B0E            ldr              r3,=LongueurSon
    35 00000006 681C            ldr              r4,[r3]
    36 00000008 42A0            cmp              r0,r4
-   37 0000000A D014            beq              echantilloncomplet
+   37 0000000A D016            beq              echantilloncomplet
    38 0000000C         ;on créer un "for" de i allant de 1 a 5512 (Longueur Son
                        )
    39 0000000C         ;cmp indice,#5512
    40 0000000C         ;bne échantillon pas complet on envoie 
    41 0000000C         ;sinon échantillon complet on ne lit plus
-   42 0000000C 4B0C            ldr              r3,=Son
+   42 0000000C 4B0D            ldr              r3,=Son
    43 0000000E F933 2010       ldrsh            r2,[r3,r0,lsl#1]
    44 00000012 F44F 4400       mov              r4,#32768
 
@@ -145,31 +145,33 @@ ARM Macro Assembler    Page 3
    53 00000020         ;on a bien une valeur dans [0;719] sur sortieSon
    54 00000020         ;il faut store la valeur au bon endroit du tableau[indic
                        e]
-   55 00000020 4C08            ldr              r4,=SortieSon
+   55 00000020 4C09            ldr              r4,=SortieSon
    56 00000022 6022            str              r2,[r4]
-   57 00000024 4604            mov              r4,r0
-   58 00000026 B503            push             {r0,r1,lr}
-   59 00000028 F7FF FFFE       bl               PWM_Set_Value_TIM3_Ch3
-   60 0000002C E8BD 4003       pop              {r0,r1,lr}
-   61 00000030 F100 0001       add              r0,#1
-   62 00000034 6008            str              r0,[r1]
-   63 00000036         ;i++
-   64 00000036         echantilloncomplet
-   65 00000036 4770            bx               lr
-   66 00000038                 endp
-   67 00000038         
-   68 00000038                 END
+   57 00000024 4603            mov              r3,r0
+   58 00000026 4610            mov              r0,r2
+   59 00000028 B50A            push             {r3,r1,lr}
+   60 0000002A F7FF FFFE       bl               PWM_Set_Value_TIM3_Ch3
+   61 0000002E E8BD 400A       pop              {r3,r1,lr}
+   62 00000032 4618            mov              r0,r3
+   63 00000034 F100 0001       add              r0,#1
+   64 00000038 6008            str              r0,[r1]
+   65 0000003A         ;i++
+   66 0000003A         echantilloncomplet
+   67 0000003A 4770            bx               lr
+   68 0000003C                 endp
+   69 0000003C         
+   70 0000003C                 END
               00000000 
               00000000 
               00000000 
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
-ork --depend=.\obj\gestionson.d -o.\obj\gestionson.o -I.\Driver -I.\RTE\_Simu -
-IC:\Programdata\Keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include -IC:\Programd
-ata\Keil\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include --predefine="__EVAL 
-SETA 1" --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 534
-" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_MD SETA 1" --predefine="_RT
-E_ SETA 1" --list=gestionson.lst Src\GestionSon.s
+ork --depend=.\obj\gestionson.d -o.\obj\gestionson.o -I.\Driver -I.\RTE\_CibleS
+ondeKEIL -IC:\Programdata\Keil\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include -IC
+:\Programdata\Keil\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include --predefin
+e="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSIO
+N SETA 534" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_MD SETA 1" --pred
+efine="_RTE_ SETA 1" --list=gestionson.lst Src\GestionSon.s
 
 
 
@@ -232,11 +234,11 @@ Symbol: CallbackSon
    Uses
       At line 22 in file Src\GestionSon.s
 Comment: CallbackSon used once
-echantilloncomplet 00000036
+echantilloncomplet 0000003A
 
 Symbol: echantilloncomplet
    Definitions
-      At line 64 in file Src\GestionSon.s
+      At line 66 in file Src\GestionSon.s
    Uses
       At line 37 in file Src\GestionSon.s
 Comment: echantilloncomplet used once
@@ -323,7 +325,7 @@ External symbols
    Definitions
       At line 18 in file .\Driver\DriverJeuLaser.inc
    Uses
-      At line 59 in file Src\GestionSon.s
+      At line 60 in file Src\GestionSon.s
 Comment: PWM_Set_Value_TIM3_Ch3 used once
 PeriodeSonMicroSec 00000000
 

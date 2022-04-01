@@ -54,10 +54,12 @@ CallbackSon proc
 ;il faut store la valeur au bon endroit du tableau[indice]
 	ldr r4,=SortieSon
 	str r2,[r4]
-	mov r4,r0
-    push {r0,r1,lr}
+	mov r3,r0
+	mov r0,r2
+    push {r3,r1,lr}
 	bl PWM_Set_Value_TIM3_Ch3
-	pop {r0,r1,lr}
+	pop {r3,r1,lr}
+	mov r0,r3
 	add r0,#1
 	str r0,[r1]
 ;i++
