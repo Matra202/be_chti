@@ -21,32 +21,109 @@ sortie dcd 0
 	
 	
 	EXPORT DFT_ModuleAuCarre
-		
+	EXPORT Partie1
+	EXPORT Partie2
 ;Section ROM code (read only) :		
 	area    moncode,code,readonly
 ; écrire le code ici		
 
-DFT_ModuleAuCarre proc 
-
-	; partie 1 (réelle) :
+Partie1 proc 
+; partie 1 (réelle) :
+	
+debut
 	ldr r3,=indice
 	ldr r2,[r3]
 	cmp r2,#64
 	beq finboucle
 	;pour i de 0 a M-1 = 0 à 63{
-	ldrsh r4,[r0,r2]
-	;on accede a la valeur du tableau a n : xn=x(n)
+	ldrh r4,[r0,r2,lsl#1]
+	;on accede a la valeur du tableau a n : xn=x(n) (r4)
+	;nk=n*k(mod)64 (r5)
+	mul r5,r2,r1
+	and r5,#0x003F
 	;on fait le modulo 64 de n*k avec un masque 6 bits
-	;ANDS 0x0031,n*k
-	;nk=n*k(mod)64
 	;c=cos(2*pi*nk/M)
+	ldr r6,=TabCos
+	ldrsh r6,[r6,r5,lsl#1]
+	mul r6,r6,r4
+	ldr r7,=sortie
+	ldr r8,[r7]
+	add r8,r6
+	str r8,[r7]
 	;on mutliplie et on l'additionne à la somme des valeurs déja trouvées
 	;sum=c*xn+sum}
+	add r2,#1
+	str r2,[r3]
+	b debut
+	;incrément de l'indice 
+	;fin pour}
 finboucle
+	ldr r7,=sortie
+	ldr r0,[r7]
 	bx lr
 	;à la fin de la boucle on retourne la somme 
 	;return sum
+	endp
 
+Partie2 proc 
+; partie 2 (im) :
+debut2
+	ldr r3,=indice
+	ldr r2,[r3]
+	cmp r2,#64
+	beq finboucle2
+	;pour i de 0 a M-1 = 0 à 63{
+	ldrh r4,[r0,r2,lsl#1]
+	;on accede a la valeur du tableau a n : xn=x(n) (r4)
+	;nk=n*k(mod)64 (r5)
+	mul r5,r2,r1
+	and r5,#0x003F
+	;on fait le modulo 64 de n*k avec un masque 6 bits
+	;c=cos(2*pi*nk/M)
+	ldr r6,=TabSin
+	ldrsh r6,[r6,r5,lsl#1]
+	mul r6,r6,r4
+	ldr r7,=sortie
+	ldr r8,[r7]
+	add r8,r6
+	str r8,[r7]
+	;on mutliplie et on l'additionne à la somme des valeurs déja trouvées
+	;sum=c*xn+sum}
+	add r2,#1
+	str r2,[r3]
+	b debut2
+	;incrément de l'indice 
+	;fin pour}
+finboucle2
+	ldr r7,=sortie
+	ldr r0,[r7]
+	bx lr
+	;à la fin de la boucle on retourne la somme 
+	;return sum
+	endp
+
+
+DFT_ModuleAuCarre proc 
+
+	;partie 3
+	push{lr}
+	push{r0,r1}
+	bl Partie1
+	mov r2,r0
+	pop{r0,r1}
+	bl Partie2
+	mov r3,r0
+	pop{lr}
+	;reste a module au carré r2+r3 (cos + sin)
+	smlal r7,r2,r2,r2
+	smlal r7,r3,r3,r3
+	add r2,r3
+	mov r0,r2
+	;il faut mettre sur r0 et r1 car 64 bits
+	bx lr;on a un résultat en 10.54 car on multiplie des 5.27 pour les carrés et on les sommes
+	;à la fin de la boucle on retourne la somme 
+	;return sum
+	endp
 ;Section ROM code (read only) :		
 	AREA Trigo, DATA, READONLY
 ; codage fractionnaire 1.15
