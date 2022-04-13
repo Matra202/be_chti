@@ -60,6 +60,9 @@ debut
 finboucle
 	ldr r7,=sortie
 	ldr r0,[r7]
+	mov r4,#0
+	str r4,[r3]
+	str r4,[r7]
 	bx lr
 	;à la fin de la boucle on retourne la somme 
 	;return sum
@@ -111,14 +114,17 @@ DFT_ModuleAuCarre proc
 	bl Partie1
 	mov r2,r0
 	pop{r0,r1}
+	push{r2}
 	bl Partie2
+	pop{r2}
 	mov r3,r0
 	pop{lr}
 	;reste a module au carré r2+r3 (cos + sin)
-	smlal r7,r2,r2,r2
-	smlal r7,r3,r3,r3
-	add r2,r3
-	mov r0,r2
+	mov r4,#0
+	smlal r7,r4,r2,r2 ;carré des cos 10.22 sur les bits de poids fort
+	smlal r7,r4,r3,r3 ;carré des sin 10.22 sur les bits de poids fort
+	;add r4,r5 ;10.22 sur les bits de poids fort
+	mov r0,r4
 	;il faut mettre sur r0 et r1 car 64 bits
 	bx lr;on a un résultat en 10.54 car on multiplie des 5.27 pour les carrés et on les sommes
 	;à la fin de la boucle on retourne la somme 

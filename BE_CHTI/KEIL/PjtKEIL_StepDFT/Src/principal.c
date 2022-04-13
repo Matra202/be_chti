@@ -24,10 +24,10 @@ CLOCK_Configure();
 while	(1)
 	{
 		//test 1ere étape
-		char k1=1;
+		char k1=12;
 		
 		DFT_ModuleAuCarre(&LeSignal[0],k1);
-		//Partie1(&LeSignal[0],k1);
+		//Partie2(&LeSignal[0],k1);
 	}
 }
 
