@@ -339,7 +339,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>STM32F103xB,USE_FULL_LL_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Driver;.\Src</IncludePath>
+              <IncludePath>.\Driver;.\Src;..\ModuleAffichage</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

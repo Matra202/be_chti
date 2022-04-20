@@ -2,6 +2,7 @@
 
 #include "DriverJeuLaser.h"
 #include "DFT.h"
+#include "Affichage_valise.h"
 
 //extern int DFT_ModuleAuCarre( short int * Signal64ech, char k) ;
 short dma_buf[64]; 
@@ -30,7 +31,8 @@ int main(void)
 CLOCK_Configure();
 Timer_1234_Init_ff( TIM2, 225);
 //Active_IT_Debordement_Timer( TIM2, 1, CallbackTimer );
-	
+//Timer_1234_Init_ff( TIM1, 57600);
+//Active_IT_Debordement_Timer( TIM1, 8, Mise_A_Jour_Afficheurs_LED );
 //GPIOA_Set('2');
 	//Initialisation du systick
 Systick_Period_ff( 360000 );
