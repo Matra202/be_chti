@@ -12,15 +12,15 @@
 				
 				
 	IMPORT Son
+	IMPORT LongueurSon
 	
 SortieSon dcd 0
-indice dcw 0
+indiceson dcw 0
 	EXPORT SortieSon
-	EXPORT indice
+	EXPORT indiceson
 ; ===============================================================================================
 	
 	EXPORT CallbackSon
-
 		
 ;Section ROM code (read only) :		
 	area    moncode,code,readonly
@@ -28,8 +28,8 @@ indice dcw 0
 	include DriverJeuLaser.inc
 
 CallbackSon proc
-
-	ldr r1,=indice
+	push{r4-r10}
+	ldr r1,=indiceson
 	ldr r0,[r1]
 	ldr r3,=LongueurSon
 	ldr r4,[r3]
@@ -64,6 +64,7 @@ CallbackSon proc
 	str r0,[r1]
 ;i++
 echantilloncomplet
+	pop{r4-r10}
 	bx lr 
 	endp	
 		 

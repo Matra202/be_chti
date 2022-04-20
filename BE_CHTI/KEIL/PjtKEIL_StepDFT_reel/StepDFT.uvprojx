@@ -398,6 +398,16 @@
               <FileType>2</FileType>
               <FilePath>.\Src\Signal.asm</FilePath>
             </File>
+            <File>
+              <FileName>bruitverre.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\PjtKEIL_StepSon\Src\bruitverre.asm</FilePath>
+            </File>
+            <File>
+              <FileName>GestionSon.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\PjtKEIL_StepSon\Src\GestionSon.s</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -417,6 +427,16 @@
               <FileName>DriverJeuLaser.lib</FileName>
               <FileType>4</FileType>
               <FilePath>.\Driver\DriverJeuLaser.lib</FilePath>
+            </File>
+            <File>
+              <FileName>affichage_valise.o</FileName>
+              <FileType>3</FileType>
+              <FilePath>..\ModuleAffichage\affichage_valise.o</FilePath>
+            </File>
+            <File>
+              <FileName>DriverJeuLaser.inc</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\PjtKEIL_StepSon\Driver\DriverJeuLaser.inc</FilePath>
             </File>
           </Files>
         </Group>
@@ -553,7 +573,7 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4100</DriverSelection>
+            <DriverSelection>4101</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
@@ -758,7 +778,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>STM32F103xB,USE_FULL_LL_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Driver</IncludePath>
+              <IncludePath>.\Driver;..\ModuleAffichage;.\Src;.\Obj</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -776,7 +796,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>.\Src;.\Driver</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -817,6 +837,16 @@
               <FileType>2</FileType>
               <FilePath>.\Src\Signal.asm</FilePath>
             </File>
+            <File>
+              <FileName>bruitverre.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\PjtKEIL_StepSon\Src\bruitverre.asm</FilePath>
+            </File>
+            <File>
+              <FileName>GestionSon.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\PjtKEIL_StepSon\Src\GestionSon.s</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -836,6 +866,16 @@
               <FileName>DriverJeuLaser.lib</FileName>
               <FileType>4</FileType>
               <FilePath>.\Driver\DriverJeuLaser.lib</FilePath>
+            </File>
+            <File>
+              <FileName>affichage_valise.o</FileName>
+              <FileType>3</FileType>
+              <FilePath>..\ModuleAffichage\affichage_valise.o</FilePath>
+            </File>
+            <File>
+              <FileName>DriverJeuLaser.inc</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\PjtKEIL_StepSon\Driver\DriverJeuLaser.inc</FilePath>
             </File>
           </Files>
         </Group>
@@ -1305,6 +1345,16 @@
               <FileType>2</FileType>
               <FilePath>.\Src\Signal.asm</FilePath>
             </File>
+            <File>
+              <FileName>bruitverre.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\PjtKEIL_StepSon\Src\bruitverre.asm</FilePath>
+            </File>
+            <File>
+              <FileName>GestionSon.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\PjtKEIL_StepSon\Src\GestionSon.s</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1324,6 +1374,16 @@
               <FileName>DriverJeuLaser.lib</FileName>
               <FileType>4</FileType>
               <FilePath>.\Driver\DriverJeuLaser.lib</FilePath>
+            </File>
+            <File>
+              <FileName>affichage_valise.o</FileName>
+              <FileType>3</FileType>
+              <FilePath>..\ModuleAffichage\affichage_valise.o</FilePath>
+            </File>
+            <File>
+              <FileName>DriverJeuLaser.inc</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\PjtKEIL_StepSon\Driver\DriverJeuLaser.inc</FilePath>
             </File>
           </Files>
         </Group>
