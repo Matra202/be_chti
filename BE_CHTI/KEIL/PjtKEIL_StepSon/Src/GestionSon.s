@@ -15,7 +15,7 @@
 	IMPORT LongueurSon
 	
 SortieSon dcd 0
-indiceson dcw 0
+indiceson dcw 5512 ;on ne lance pas le son au début 
 	EXPORT SortieSon
 	EXPORT indiceson
 ; ===============================================================================================

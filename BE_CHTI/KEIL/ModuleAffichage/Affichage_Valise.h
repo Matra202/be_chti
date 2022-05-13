@@ -57,7 +57,7 @@ void Prepare_Clear_LED(char LED);
 void Mise_A_Jour_Afficheurs_LED(void);
 
 /**
-	* @brief  Spécifie le capteut actif, à savoir celui effectivement relié
+	* @brief  Spécifie le capteur actif, à savoir celui effectivement relié
 	*					aux sorties disponibles sur la malette
   * @note   Exemple : Choix_Capteur(1)        
 	* @param  1 à 4

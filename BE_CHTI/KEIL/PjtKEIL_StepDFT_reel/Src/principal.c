@@ -13,6 +13,8 @@ int dft_tab[64];
 int tab_score[4];
 int compteur[4];
 void check_cible(void);
+int capteur = 1;
+
 
 void startson(){
 	indiceson=0;
@@ -34,22 +36,39 @@ void CallbackTimer(void);
 
 void initialisation(void){
 	Init_Affichage();
+	Prepare_Set_LED(0);
+	Choix_Capteur(capteur);
 	for (int i =1;i<5;i++){
-		Prepare_Clear_Point_Unite(i);
-		Prepare_Clear_LED(i-1);
+		//Prepare_Clear_Point_Unite(i);
 		Prepare_Afficheur(i, 0);
 		tab_score[i-1]=0;
 		compteur[i-1]=0;
 	}
+	Mise_A_Jour_Afficheurs_LED();
 }
 
 void check_cible(){ 
 	for (int  i =17;i<21;i++){
-		if (dft_tab[i]>1000) {
+		if (dft_tab[i]>3000) {
 			compteur[i-17]++;
 			if (compteur[i-17]>=11){
 				tab_score[i-17]++;
 				startson();
+				Prepare_Afficheur(i-16,tab_score[i-17]);
+				for (int j =0;j<4;j++){
+					Prepare_Clear_LED(j);
+				}	
+				capteur=dft_tab[0]%4 +1;
+				Prepare_Set_LED((capteur)%4);
+				if (capteur==4){
+					capteur=1;
+				}
+				else{
+					capteur+=1;
+				}
+				capteur=(capteur);
+				Choix_Capteur(capteur);
+				Mise_A_Jour_Afficheurs_LED();
 				compteur[i-17]=0;
 			}
 		}
@@ -89,7 +108,7 @@ Init_Conversion_On_Trig_Timer_ff( ADC1, TIM2_CC2, 225 );
 Init_ADC1_DMA1( 0, dma_buf );
 
 Timer_1234_Init_ff( TIM4, 6552  );
-Active_IT_Debordement_Timer( TIM4, 10, CallbackSon );
+Active_IT_Debordement_Timer( TIM4, 5, CallbackSon );
 		
 PWM_Init_ff(TIM3,3,720);
 GPIO_Configure(GPIOB, 0, OUTPUT, ALT_PPULL);

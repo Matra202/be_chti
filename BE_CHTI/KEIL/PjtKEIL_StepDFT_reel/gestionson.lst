@@ -24,8 +24,9 @@ ARM Macro Assembler    Page 1
    17 00000000 00000000 
                        SortieSon
                                dcd              0
-   18 00000004 00 00   indiceson
-                               dcw              0
+   18 00000004 88 15   indiceson
+                               dcw              5512        ;on ne lance pas le
+                                                             son au début 
    19 00000006                 EXPORT           SortieSon
    20 00000006                 EXPORT           indiceson
    21 00000006         ; ======================================================
@@ -62,13 +63,13 @@ ARM Macro Assembler    Page 1
    17 00000000         ;void PWM_Set_Value_TIM3_Ch3( unsigned short int Thaut_t
                        icks);
    18 00000000                 import           PWM_Set_Value_TIM3_Ch3
-   19 00000000         
 
 
 
 ARM Macro Assembler    Page 2 
 
 
+   19 00000000         
    20 00000000         
    21 00000000         
    22 00000000         ;/**
@@ -127,13 +128,13 @@ ARM Macro Assembler    Page 2
    45 0000001A 4422            add              r2,r4
    46 0000001C F04F 045B       mov              r4,#91
    47 00000020 FB92 F2F4       sdiv             r2,r4
-   48 00000024         
 
 
 
 ARM Macro Assembler    Page 3 
 
 
+   48 00000024         
    49 00000024         ;accéder au tableauson à l'indice i
    50 00000024         ;ajouter 32768 à la valeur 
    51 00000024         ;diviser cette valeur par 65 535
