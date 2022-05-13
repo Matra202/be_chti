@@ -49,7 +49,7 @@ void initialisation(void){
 
 void check_cible(){ 
 	for (int  i =17;i<21;i++){
-		if (dft_tab[i]>3000) {
+		if (dft_tab[i]>15000) {
 			compteur[i-17]++;
 			if (compteur[i-17]>=11){
 				tab_score[i-17]++;
